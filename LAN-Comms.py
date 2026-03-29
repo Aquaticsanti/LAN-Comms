@@ -4,6 +4,10 @@ import socket
 import time
 import os
 from readchar import readkey, key
+import pickle # im sorry im actually using pickles in my program LMAOO
+
+def cls(): # Source - https://stackoverflow.com/a/684344
+    os.system('cls' if os.name=='nt' else 'clear')
 
 def printLoading(text: str, wait: int|float = 3):
 
@@ -53,6 +57,7 @@ thread = threading.Thread(target=printLoading, kwargs={"text": "Connecting", "wa
 thread.start()
 sock = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # For debugging purposes, allows 2 clients on the same machine
 while thread.is_alive() == True:
     pass
 try:
@@ -82,6 +87,24 @@ while True:
     elif k == key.ENTER:
         print(colored(username, colors[selected_color]), "")
         break
+
+printLoading("Joining", 2.5)
+cls()
+
+
+def receive():
+    pass
+def send():
+    pass
+threadSend = threading.Thread(target=send)
+threadRecv = threading.Thread(target=receive)
+
+myMsg = input("whachu wanna send: ")
+myMsg = {"name": username, "color": selected_color, "msg":myMsg}
+sock.sendto(pickle.dumps(myMsg), ("255.255.255.255", port))
+message, address = sock.recvfrom(4096)
+message = pickle.loads(message)
+print(colored(f"[{message["name"]}]: {message["msg"]}", colors[message["color"]]))
 
 
 
