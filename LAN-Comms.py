@@ -67,7 +67,12 @@ except Exception as e:
     os._exit(0)
 print("Connected!   ")
 print("Please input your username:")
-username = input()
+while True:
+    username = input()
+    if username == "":
+        print("Username can't be blank, please choose another username!")
+    else:
+        break
 print("Now, please pick your color. Use the up and down arrow keys to change, and enter to select")
 colors = ["black", "red", "green", "yellow", "blue", "magenta", "cyan", "white",
 "light_grey", "dark_grey", "light_red", "light_green", "light_yellow", "light_blue",
