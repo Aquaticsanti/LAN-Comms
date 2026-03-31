@@ -127,7 +127,6 @@ def getKeyStroke():
     elif k == key.PAGE_DOWN:
         myMsgText.append(pyperclip.paste())
     elif type(k) == str:
-        print(k)
         myMsgText.append(k)
 # print(colored(f"[{message["name"]}]: {message["msg"]}", colors[message["color"]]))
 threadSend = threading.Thread(target=send)
