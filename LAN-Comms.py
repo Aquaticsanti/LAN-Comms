@@ -5,6 +5,8 @@ import time
 import os
 from readchar import readkey, key
 import pickle # im sorry im actually using pickles in my program LMAOO
+import atexit
+import pyperclip
 
 def cls(): # Source - https://stackoverflow.com/a/684344
     os.system('cls' if os.name=='nt' else 'clear')
@@ -95,22 +97,59 @@ while True:
 
 printLoading("Joining", 2.5)
 cls()
-
+allMsg = []
 
 def receive():
-    pass
+    global allMsg
+    message = sock.recvfrom(4096)
+    message = pickle.loads(message[0])
+    allMsg.append(message)
+
 def send():
-    pass
+    global myMsg
+    global myMsgText
+    myMsg = {"name": username, "color": selected_color, "msg":"".join(myMsgText)}
+    sock.sendto(pickle.dumps(myMsg), ("255.255.255.255", port))
+    myMsgText = []
+
+def getKeyStroke():
+    global myMsgText
+    global threadSend
+    k = readkey()
+    if k == key.ENTER:
+        threadSend = threading.Thread(target=send)
+        threadSend.start()
+    elif k == key.BACKSPACE:
+        try:
+            myMsgText.pop()
+        except IndexError:
+            pass
+    elif k == key.PAGE_DOWN:
+        myMsgText.append(pyperclip.paste())
+    elif type(k) == str:
+        print(k)
+        myMsgText.append(k)
+# print(colored(f"[{message["name"]}]: {message["msg"]}", colors[message["color"]]))
 threadSend = threading.Thread(target=send)
 threadRecv = threading.Thread(target=receive)
+threadType = threading.Thread(target=getKeyStroke)
+myMsgText = []
+while True:
+    while threadType.is_alive() == True ^ threadRecv.is_alive() == True:
+        pass
+    if threadRecv.is_alive() == False:
+        threadRecv = threading.Thread(target=receive)
+        threadRecv.start()
+        cls()
+        for msg in allMsg:
+            print(colored(f"[{msg["name"]}]: {msg["msg"]}", colors[msg["color"]]))
+        print(f"╒═{"═"*(len(myMsgText)+len(username))}═╕")
+        print(colored(f" [{username}]: {"".join(myMsgText)}", colors[selected_color]))
+    if threadType.is_alive() == False:
+        threadType = threading.Thread(target=getKeyStroke)
+        threadType.start()
+        print("\033[2A")
+        print(colored(f" [{username}]: {"".join(myMsgText)} ", colors[selected_color]))
 
-myMsg = input("whachu wanna send: ")
-myMsg = {"name": username, "color": selected_color, "msg":myMsg}
-sock.sendto(pickle.dumps(myMsg), ("255.255.255.255", port))
-message, address = sock.recvfrom(4096)
-message = pickle.loads(message)
-print(colored(f"[{message["name"]}]: {message["msg"]}", colors[message["color"]]))
-
-
-
-    
+    # Cool divider: ╒═════════════════╕ Source: https://gist.github.com/jamiew/40c66061b666272462c17f65addb14d5
+    time.sleep(0.5)
