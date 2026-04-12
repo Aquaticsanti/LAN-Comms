@@ -134,21 +134,34 @@ threadRecv = threading.Thread(target=receive)
 threadType = threading.Thread(target=getKeyStroke)
 myMsgText = []
 while True:
+    alreadyPrintedMsgBox =  False
     while threadType.is_alive() == True ^ threadRecv.is_alive() == True:
         pass
+
     if threadRecv.is_alive() == False:
+        print("\033[3A")
+        try:
+            print(f"{colored(f"[{allMsg[-1]["name"]}]: {allMsg[-1]["msg"]}", colors[allMsg[-1]["color"]])}{" "*42}")
+        
+        except:
+            pass
+        if alreadyPrintedMsgBox == False:
+            print(f"╒═{"═"*(len("".join(myMsgText))+len(username)+3)}═╕ {" "*42}")
+            print(colored(f"|[{username}]: {"".join(myMsgText)} | ", colors[selected_color]))
+            print("\n")
+            alreadyPrintedMsgBox = True
+
         threadRecv = threading.Thread(target=receive)
         threadRecv.start()
-        cls()
-        for msg in allMsg:
-            print(colored(f"[{msg["name"]}]: {msg["msg"]}", colors[msg["color"]]))
-        print(f"╒═{"═"*(len(myMsgText)+len(username))}═╕")
-        print(colored(f" [{username}]: {"".join(myMsgText)}", colors[selected_color]))
+
     if threadType.is_alive() == False:
+
+        print("\033[3A")
+
+        if alreadyPrintedMsgBox == False:
+            print(f"╒═{"═"*(len("".join(myMsgText))+len(username)+3)}═╕ ")
+            print(colored(f"|[{username}]: {"".join(myMsgText)} | ", colors[selected_color]))
+            alreadyPrintedMsgBox = True
         threadType = threading.Thread(target=getKeyStroke)
         threadType.start()
-        print("\033[2A")
-        print(colored(f" [{username}]: {"".join(myMsgText)} ", colors[selected_color]))
-
-    # Cool divider: ╒═════════════════╕ Source: https://gist.github.com/jamiew/40c66061b666272462c17f65addb14d5
-    time.sleep(0.5)
+# Cool divider: ╒═════════════════╕ Source: https://gist.github.com/jamiew/40c66061b666272462c17f65addb14d5
