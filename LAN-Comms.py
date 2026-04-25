@@ -142,6 +142,9 @@ threadSend = threading.Thread(target=send)
 threadRecv = threading.Thread(target=receive)
 threadType = threading.Thread(target=getKeyStroke)
 myMsgText = []
+ActiveUsers = []
+sock.sendto(pickle.dumps({"name": username, "color": selected_color, "type": 1}), ("255.255.255.255", port))
+
 # Message Structure:
 # Type 0: Regular message. Contains "name", "color", "msg", "type", "type"
 # Type 1: Join alert. This is sent by a new user, when they join a chat. Contains "name", "color", "type"
@@ -175,19 +178,21 @@ while True:
             print(f"╔═{"═"*(len("".join(myMsgText))+len(username)+3)}═╗ {" "*42}")
             print(f"║{colored(f"[{username}]: {"".join(myMsgText)}", colors[selected_color])} ║{" "*42}")
             print(f"╚═{"═"*(len("".join(myMsgText))+len(username)+3)}═╝ {" "*42}")
+            for user in ActiveUsers:
+                print(colored(f"■ {user["name"]}", colors[user["color"]]), end=" - ")
+            print(colored(f"Connected to port {port}", "dark_grey"))
             alreadyPrintedMsgBox = True
-
         threadRecv = threading.Thread(target=receive)
         threadRecv.start()
 
     if threadType.is_alive() == False:
-
-        print("\033[3A")
-
         if alreadyPrintedMsgBox == False:
             print(f"╔═{"═"*(len("".join(myMsgText))+len(username)+3)}═╗ {" "*42}")
             print(f"║{colored(f"[{username}]: {"".join(myMsgText)}", colors[selected_color])} ║{" "*42}")
             print(f"╚═{"═"*(len("".join(myMsgText))+len(username)+3)}═╝ {" "*42}")
+            for user in ActiveUsers:
+                print(colored(f"■ {user["name"]}", colors[user["color"]]), end=" - ")
+            print(colored(f"Connected to port {port}", "dark_grey"))
             alreadyPrintedMsgBox = True
         threadType = threading.Thread(target=getKeyStroke)
         threadType.start()
