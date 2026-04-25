@@ -25,4 +25,19 @@ Currently, LAN-Comms is only available for **Windows**. Please do not expect tha
 
 Just grab the *.exe* file from the [releases page](https://github.com/Aquaticsanti/LAN-Comms/releases/latest), and you're all set!
 
+# Building
+
+To build a *.exe* file, use [PyInstaller](https://pyinstaller.org/)!
+
+First, clone the repo
+```` 
+git clone https://github.com/Aquaticsanti/LAN-Comms.git
+````
+Then, _cd_ into the repo, and delete __dist/__ and __LAN-Comms.spec__.
+
+Lastly, run:
+````
+pyinstaller -F -n "LAN-Comms" -i "logos/logo square.png" LAN-Comms.py
+````
+And done! You should find _LAN-Comms.exe_ on your dist folder!
 # Enjoy!
