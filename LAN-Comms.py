@@ -117,7 +117,7 @@ def receive():
 def send():
     global myMsg
     global myMsgText
-    myMsg = {"name": username, "color": selected_color, "msg":"".join(myMsgText)}
+    myMsg = {"name": username, "color": selected_color, "msg": "".join(myMsgText), "type": 0}
     sock.sendto(pickle.dumps(myMsg), ("255.255.255.255", port))
     myMsgText = []
 
