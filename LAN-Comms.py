@@ -67,8 +67,6 @@ thread.start()
 sock = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # For debugging purposes, allows 2 clients on the same machine
-while thread.is_alive() == True:
-    pass
 try:
     sock.bind(("0.0.0.0", port))
 except Exception as e:
@@ -151,6 +149,7 @@ sock.sendto(pickle.dumps({"name": username, "color": selected_color, "type": 1})
 # Type 2: Join acknowledgement. This is a response by all the current members of a chat, after the Join alert. Contains "name", "color", "type"
 # Type 3: Leave alert. This is sent by a user who is leaving. Contains "name", "color", "type"
 while True:
+    print("\033[5A")
     alreadyPrintedMsgBox =  False
     while (threadType.is_alive() == True) and (threadRecv.is_alive() == True):
         pass
@@ -184,7 +183,6 @@ while True:
             alreadyPrintedMsgBox = True
         threadRecv = threading.Thread(target=receive)
         threadRecv.start()
-
     if threadType.is_alive() == False:
         if alreadyPrintedMsgBox == False:
             print(f"╔═{"═"*(len("".join(myMsgText))+len(username)+3)}═╗ {" "*42}")
