@@ -12,13 +12,19 @@ def cls(): # Source - https://stackoverflow.com/a/684344
     os.system('cls' if os.name=='nt' else 'clear')
 
 def printLoading(text: str, wait: int|float = 3):
-
+    global connected
     print(f"{text}   ", end="\r")
     time.sleep(wait/4)
+    if connected == True:
+        return
     print(f"{text}.  ", end="\r")
     time.sleep(wait/4)
+    if connected == True:
+        return
     print(f"{text}.. ", end="\r")
     time.sleep(wait/4)
+    if connected == True:
+        return
     print(f"{text}...", end="\r")
     time.sleep(wait/4)
 print(colored("""
@@ -56,6 +62,7 @@ while True:
 print(f"Great! Port {port} has been selected!")
 
 thread = threading.Thread(target=printLoading, kwargs={"text": "Connecting", "wait": 3})
+connected = False
 thread.start()
 sock = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
@@ -67,6 +74,7 @@ try:
 except Exception as e:
     print(f"Uh oh, looks like something went wrong... {e}")
     os._exit(0)
+connected = True
 print("Connected!   ")
 print("Please input your username:")
 while True:
@@ -95,7 +103,8 @@ while True:
         print(colored(username, colors[selected_color]), "")
         break
 
-printLoading("Joining", 2.5)
+connected = False
+printLoading("Joining", 1)
 cls()
 allMsg = []
 
