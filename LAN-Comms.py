@@ -142,6 +142,11 @@ threadSend = threading.Thread(target=send)
 threadRecv = threading.Thread(target=receive)
 threadType = threading.Thread(target=getKeyStroke)
 myMsgText = []
+# Message Structure:
+# Type 0: Regular message. Contains "name", "color", "msg", "type", "type"
+# Type 1: Join alert. This is sent by a new user, when they join a chat. Contains "name", "color", "type"
+# Type 2: Join acknowledgement. This is a response by all the current members of a chat, after the Join alert. Contains "name", "color", "type"
+# Type 3: Leave alert. This is sent by a user who is leaving. Contains "name", "color", "type"
 while True:
     alreadyPrintedMsgBox =  False
     while threadType.is_alive() == True ^ threadRecv.is_alive() == True:
