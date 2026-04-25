@@ -149,9 +149,8 @@ myMsgText = []
 # Type 3: Leave alert. This is sent by a user who is leaving. Contains "name", "color", "type"
 while True:
     alreadyPrintedMsgBox =  False
-    while threadType.is_alive() == True ^ threadRecv.is_alive() == True:
+    while (threadType.is_alive() == True) and (threadRecv.is_alive() == True):
         pass
-
     if threadRecv.is_alive() == False:
         if len(allMsg) == 0:
             pass
