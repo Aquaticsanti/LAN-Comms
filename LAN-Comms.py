@@ -160,9 +160,9 @@ while True:
         except:
             pass
         if alreadyPrintedMsgBox == False:
-            print(f"╒═{"═"*(len("".join(myMsgText))+len(username)+3)}═╕ {" "*42}")
-            print(colored(f"|[{username}]: {"".join(myMsgText)} | ", colors[selected_color]))
-            print("\n")
+            print(f"╔═{"═"*(len("".join(myMsgText))+len(username)+3)}═╗ {" "*42}")
+            print(f"║{colored(f"[{username}]: {"".join(myMsgText)}", colors[selected_color])} ║{" "*42}")
+            print(f"╚═{"═"*(len("".join(myMsgText))+len(username)+3)}═╝ {" "*42}")
             alreadyPrintedMsgBox = True
 
         threadRecv = threading.Thread(target=receive)
@@ -173,9 +173,13 @@ while True:
         print("\033[3A")
 
         if alreadyPrintedMsgBox == False:
-            print(f"╒═{"═"*(len("".join(myMsgText))+len(username)+3)}═╕ ")
-            print(colored(f"|[{username}]: {"".join(myMsgText)} | ", colors[selected_color]))
+            print(f"╔═{"═"*(len("".join(myMsgText))+len(username)+3)}═╗ {" "*42}")
+            print(f"║{colored(f"[{username}]: {"".join(myMsgText)}", colors[selected_color])} ║{" "*42}")
+            print(f"╚═{"═"*(len("".join(myMsgText))+len(username)+3)}═╝ {" "*42}")
             alreadyPrintedMsgBox = True
         threadType = threading.Thread(target=getKeyStroke)
         threadType.start()
-# Cool divider: ╒═════════════════╕ Source: https://gist.github.com/jamiew/40c66061b666272462c17f65addb14d5
+    
+# Cool box divider: ╔════════╗
+#                   ║        ║ Source: https://gist.github.com/jamiew/40c66061b666272462c17f65addb14d5
+#                   ╚════════╝
