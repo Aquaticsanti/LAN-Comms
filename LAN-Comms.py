@@ -6,6 +6,7 @@ import os
 from readchar import readkey, key
 import pickle # im sorry im actually using pickles in my program LMAOO
 import pyperclip
+import win32con, win32api
 
 def cls(): # Source - https://stackoverflow.com/a/684344
     os.system('cls' if os.name=='nt' else 'clear')
@@ -118,6 +119,22 @@ def send():
     sock.sendto(pickle.dumps(myMsg), ("255.255.255.255", port))
     myMsgText = []
 
+def sendLeave():
+    sock.sendto(pickle.dumps({"name": username, "color": selected_color, "type": 3}), ("255.255.255.255", port))
+
+# Source - https://stackoverflow.com/a/74969378
+# Posted by nat-echlin
+# Retrieved 2026-04-25, License - CC BY-SA 4.0
+
+def exit_handler(event):
+    if event in [win32con.CTRL_C_EVENT, win32con.CTRL_LOGOFF_EVENT,
+                         win32con.CTRL_BREAK_EVENT, win32con.CTRL_SHUTDOWN_EVENT,
+                         win32con.CTRL_CLOSE_EVENT]:
+        sendLeave()
+
+win32api.SetConsoleCtrlHandler(exit_handler, 1)
+
+
 def getKeyStroke():
     global myMsgText
     global threadSend
@@ -189,7 +206,7 @@ while True:
             print(f"╚═{"═"*(len("".join(myMsgText))+len(username)+3)}═╝ {" "*42}")
             for user in ActiveUsers:
                 print(colored(f"■ {user["name"]}", colors[user["color"]]), end=" - ")
-            print(colored(f"Connected to port {port}", "dark_grey"))
+            print(colored(f"Connected to port {port}", "dark_grey"), " "*(42+len(f"Connected to port {port}")))
             alreadyPrintedMsgBox = True
         threadType = threading.Thread(target=getKeyStroke)
         threadType.start()
