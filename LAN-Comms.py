@@ -153,12 +153,25 @@ while True:
         pass
 
     if threadRecv.is_alive() == False:
-        print("\033[3A")
-        try:
-            print(f"{colored(f"[{allMsg[-1]["name"]}]: {allMsg[-1]["msg"]}", colors[allMsg[-1]["color"]])}{" "*42}")
-        
-        except:
+        if len(allMsg) == 0:
             pass
+        else:
+            if allMsg[-1]["type"] == 0: # Someone sent a regular message
+                print(f"{colored(f"[{allMsg[-1]["name"]}]: {allMsg[-1]["msg"]}", colors[allMsg[-1]["color"]])}{" "*(42+len(f"Connected to port {port}"))}")
+            elif allMsg[-1]["type"] == 1: # Someone joined
+                if {"name": allMsg[-1]["name"], "color": allMsg[-1]["color"]} in ActiveUsers:
+                    pass
+                else:
+                    ActiveUsers.append({"name": allMsg[-1]["name"], "color": allMsg[-1]["color"]})
+                    print(f"{colored(f"{allMsg[-1]["name"]} just joined!", colors[allMsg[-1]["color"]])}{" "*42}")
+                    sock.sendto(pickle.dumps({"name": username, "color": selected_color, "type": 2}), ("255.255.255.255", port))
+            elif allMsg[-1]["type"] == 2: # Join acknowledgement
+                if {"name": allMsg[-1]["name"], "color": allMsg[-1]["color"]} in ActiveUsers:
+                    pass
+                else:
+                    ActiveUsers.append({"name": allMsg[-1]["name"], "color": allMsg[-1]["color"]})
+            elif allMsg[-1]["type"] == 3:
+                ActiveUsers.pop(ActiveUsers.index({"name": allMsg[-1]["name"], "color": allMsg[-1]["color"]}))
         if alreadyPrintedMsgBox == False:
             print(f"╔═{"═"*(len("".join(myMsgText))+len(username)+3)}═╗ {" "*42}")
             print(f"║{colored(f"[{username}]: {"".join(myMsgText)}", colors[selected_color])} ║{" "*42}")
