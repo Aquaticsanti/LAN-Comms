@@ -5,7 +5,6 @@ import time
 import os
 from readchar import readkey, key
 import pickle # im sorry im actually using pickles in my program LMAOO
-import atexit
 import pyperclip
 
 def cls(): # Source - https://stackoverflow.com/a/684344
