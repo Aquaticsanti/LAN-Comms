@@ -37,7 +37,7 @@ Then, _cd_ into the repo, and delete __dist/__ and __LAN-Comms.spec__.
 
 Lastly, run:
 ````
-pyinstaller -F -n "LAN-Comms" -i "logos/logo square.png" LAN-Comms.py
+pyinstaller -F -n "LAN-Comms" -i "logos/logo square.png" --recursive-copy-metadata readchar LAN-Comms.py
 ````
 And done! You should find _LAN-Comms.exe_ on your dist folder!
 # Enjoy!
