@@ -5,7 +5,6 @@ import time
 import os
 from readchar import readkey, key
 import pickle # im sorry im actually using pickles in my program LMAOO
-import pyperclip
 import win32con, win32api
 
 def cls(): # Source - https://stackoverflow.com/a/684344
@@ -147,8 +146,6 @@ def getKeyStroke():
             myMsgText.pop()
         except IndexError:
             pass
-    elif k == key.PAGE_DOWN:
-        myMsgText.append(pyperclip.paste())
     elif type(k) == str:
         myMsgText.append(k)
 # print(colored(f"[{message["name"]}]: {message["msg"]}", colors[message["color"]]))
